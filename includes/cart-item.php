@@ -63,24 +63,19 @@ $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- Added JavaScript for quantity controls -->
 <script>
-function updateQuantity(itemId, change) {
-  console.log('[v0] Updating quantity for item:', itemId, 'change:', change);
-  // TODO: Implement quantity update logic
-  // This would typically make an AJAX call to update the cart
-}
-
+  
   function eliminarDelCarrito(id) {
     fetch('../store/cart_actions.php', {
-      method: 'DELETE',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: 'id=' + encodeURIComponent(id)
+      body: 'action=delete&id=' + encodeURIComponent(id)
     })
     .then(res => res.text())
     .then(data => {
       console.log(data);
-      location.reload(); // 🔄 Refresca para actualizar la vista
+      location.reload();
     });
   }
 </script>

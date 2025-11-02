@@ -1,5 +1,6 @@
 <?php
-require_once '../db_conexion.php';
+
+require_once './db_conexion.php';
 
 $query = $pdo->query("SELECT * FROM productos");
 $productos = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -78,10 +79,11 @@ $productos = $query->fetchAll(PDO::FETCH_ASSOC);
     fetch('../store/cart_actions.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'id=' + encodeURIComponent(id)
+      body: 'action=add&id=' + encodeURIComponent(id),
     })
     .then(res => res.text())
     .then(data => {
+      updateCartBadge();
       console.log(data);
       // Show success notification
       const notification = document.createElement('div');

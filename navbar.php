@@ -1,9 +1,9 @@
 <?php
-require_once '../db_conexion.php';
+require_once 'db_conexion.php';
 
 session_start();
 
-$arrayLength = count($_SESSION['carrito']);
+$arrayLength = count($_SESSION['carrito'] ?? []);
 
 ?>
 
@@ -13,7 +13,7 @@ $arrayLength = count($_SESSION['carrito']);
     <div class="flex justify-between items-center h-16">
       
       <!-- Logo -->
-      <a href="/pages/home.php" class="flex items-center space-x-2 group">
+      <a href="/" class="flex items-center space-x-2 group">
         <div class="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
           <span class="text-white font-bold text-sm">TN</span>
         </div>
@@ -22,7 +22,7 @@ $arrayLength = count($_SESSION['carrito']);
 
       <!-- Desktop Navigation -->
       <div class="hidden md:flex items-center space-x-3">
-        <a href="/pages/home.php" class="text-sm px-3 py-2 rounded-lg font-medium hover:bg-neutral-100 text-neutral-600 hover:text-neutral-900 transition-colors">
+        <a href="/" class="text-sm px-3 py-2 rounded-lg font-medium hover:bg-neutral-100 text-neutral-600 hover:text-neutral-900 transition-colors">
           Inicio
         </a>
         <a href="/pages/cart.php" class="text-sm px-3 py-2 rounded-lg font-medium hover:bg-neutral-100 text-neutral-600 hover:text-neutral-900 transition-colors">
@@ -62,7 +62,7 @@ $arrayLength = count($_SESSION['carrito']);
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden md:hidden border-t border-neutral-200 bg-white">
     <div class="px-4 py-4 space-y-3">
-      <a href="/pages/home.php" class="block px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors">
+      <a href="/" class="block px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors">
         Inicio
       </a>
       <a href="/pages/cart.php" class="block px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors">

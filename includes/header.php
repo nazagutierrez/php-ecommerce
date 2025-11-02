@@ -7,4 +7,4 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-<?php require_once __DIR__ . '/navbar.php'; ?>
+<?php require_once __DIR__ . '/../navbar.php'; ?>
