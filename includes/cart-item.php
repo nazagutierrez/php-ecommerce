@@ -1,52 +1,74 @@
 <?php
-require_once '../includes/header.php';
 require_once '../db_conexion.php';
 
-// Verificar si el carrito existe y no está vacío
 if (!isset($_SESSION['carrito']) || empty($_SESSION['carrito'])) {
-  echo "<p class='text-center mt-8 text-gray-600'>Tu carrito está vacío 🛒</p>";
-  exit;
+  echo "<p class='text-center h-32 grid place-content-center text-gray-500 text-lg'>Tu carrito está vacío 🛒</p>";
+  return;
 }
 
-// Convertir los IDs del carrito a una cadena separada por comas
 $ids = implode(',', array_map('intval', $_SESSION['carrito']));
-
-// Consulta solo los productos que estén en el carrito
 $stmt = $pdo->query("SELECT * FROM productos WHERE id IN ($ids)");
 $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="w-full max-w-5xl mx-auto">
-  <h2 class="text-2xl font-bold mb-6 text-center">🛒 Tu carrito</h2>
-
+<div class="divide-y divide-neutral-200">
   <?php foreach ($cartItems as $cartItem): ?>
-    <div class="flex w-full items-center justify-between border-b last:border-0 py-3">
-      <div class="flex w-[150px] items-center space-x-3">
-        <img src="<?= "/public" . htmlspecialchars($cartItem['imagen']) ?>" 
-             alt="<?= htmlspecialchars($cartItem['nombre']) ?>" 
-             class="w-16 h-16 rounded object-cover">
-        <div>
-          <h3 class="font-semibold"><?= htmlspecialchars($cartItem['nombre']) ?></h3>
-          <p class="text-gray-600 text-sm">$<?= htmlspecialchars($cartItem['precio']) ?></p>
+    <div class="p-6">
+      <div class="flex flex-col sm:flex-row gap-6">
+        <!-- Product image -->
+        <div class="flex-shrink-0">
+          <img src="<?= "/public" . htmlspecialchars($cartItem['imagen']) ?>" 
+               alt="<?= htmlspecialchars($cartItem['nombre']) ?>" 
+               class="w-full sm:w-32 h-32 rounded-xl object-cover border border-neutral-200">
         </div>
-      </div>
 
-      <div class="flex items-center space-x-3">
-        <p class="font-bold underline underline-offset-4 decoration-blue-600">$<?= htmlspecialchars($cartItem['precio']) ?></p>
-      </div>
+        <!-- Product details -->
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-start gap-4">
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-neutral-900 mb-1">
+                <?= htmlspecialchars($cartItem['nombre']) ?>
+              </h3>
+              <p class="text-sm text-neutral-600">
+                <span class="font-medium text-neutral-900"><?= htmlspecialchars($cartItem['descripcion']) ?></span>
+              </p>
+            </div>
 
-      <div>
-        <button 
-          onclick="eliminarDelCarrito(<?= $cartItem['id'] ?>)" 
-          class="w-16 h-16 bg-red-300 text-black py-2 rounded hover:bg-red-700 transition">
-          X
-        </button>
+            <!-- Remove button -->
+            <button 
+              onclick="eliminarDelCarrito(<?= $cartItem['id'] ?>)" 
+              class="flex-shrink-0 cursor-pointer p-2 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+              title="Eliminar del carrito"
+              aria-label="Eliminar producto">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-4 mt-4">
+            <!-- Item subtotal -->
+            <div class="text-right">
+              <p class="text-sm text-neutral-600 mb-1">Subtotal</p>
+              <p class="text-2xl font-bold text-neutral-900">
+                $<?= htmlspecialchars($cartItem['precio']) ?>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   <?php endforeach; ?>
 </div>
 
+<!-- Added JavaScript for quantity controls -->
 <script>
+function updateQuantity(itemId, change) {
+  console.log('[v0] Updating quantity for item:', itemId, 'change:', change);
+  // TODO: Implement quantity update logic
+  // This would typically make an AJAX call to update the cart
+}
+
   function eliminarDelCarrito(id) {
     fetch('../store/cart_actions.php', {
       method: 'DELETE',
@@ -58,7 +80,8 @@ $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
     .then(res => res.text())
     .then(data => {
       console.log(data);
-      location.reload(); // ✅ Refresca la página para mostrar los cambios
+      location.reload(); // 🔄 Refresca para actualizar la vista
     });
   }
 </script>
+
