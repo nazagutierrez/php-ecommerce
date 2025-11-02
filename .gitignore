@@ -1,0 +1,43 @@
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
+*.log.*
+
+# Archivos de PHPStorm/WebStorm
+.idea/
+*.iml
+
+# Composer (dependencias)
+vendor/
+composer.lock
+
+# Archivos de entorno
+.env
+.env.local
+.env.*.local
+
+# Caché de PHP
+*.cache
+*.tmp
+*.temp
+*.swp
+
+# Archivos de Tailwind / Node.js
+node_modules/
+package-lock.json
+yarn.lock
+
+# Archivos de build
+dist/
+build/
+
+# Bases de datos locales (si las tenés en el proyecto)
+*.sqlite
+*.db
+
+# Archivos generados por el servidor PHP local
+*.pid
+*.sock
