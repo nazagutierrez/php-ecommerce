@@ -125,8 +125,8 @@ if (!$producto) {
         </div>
 
         <!-- Quantity & Add to Cart -->
-        <form method="POST" action="../store/cart_actions.php" class="space-y-4">
-          <input type="hidden" name="id" value="<?= $producto['id'] ?>">
+		<form id="addToCart">
+  		  <input type="hidden" name="id" value="<?= $producto['id'] ?>">
 
           <div class="flex gap-3">
             <button 
@@ -351,21 +351,40 @@ if (!$producto) {
 </main>
 
 <script>
-function incrementQuantity() {
-  const input = document.getElementById('quantity');
-  const currentValue = parseInt(input.value);
-  if (currentValue < parseInt(input.max)) {
-    input.value = currentValue + 1;
+    
+document.getElementById('addToCart').addEventListener('submit', e => {
+  e.preventDefault();
+  const id = e.target.querySelector('[name="id"]').value;
+    
+    fetch('../store/cart_actions.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'action=add&id=' + encodeURIComponent(id),
+    })
+    .then(res => res.text())
+    .then(data => {
+      updateCartBadge();
+      console.log(data);
+      // Show success notification
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in';
+      notification.innerHTML = `
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span class="font-medium">Producto agregado al carrito</span>
+        </div>
+      `;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    })
+    .catch(error => console.error('Error:', error));
   }
-}
-
-function decrementQuantity() {
-  const input = document.getElementById('quantity');
-  const currentValue = parseInt(input.value);
-  if (currentValue > parseInt(input.min)) {
-    input.value = currentValue - 1;
-  }
-}
+);
 
 function showTab(tabName) {
   // Hide all tab contents
